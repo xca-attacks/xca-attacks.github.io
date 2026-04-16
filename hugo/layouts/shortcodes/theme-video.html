@@ -1,0 +1,9 @@
+{{ .Page.Scratch.Add "illustration_count" 1 -}}
+{{ $count := .Page.Scratch.Get "illustration_count" -}}
+<span class="theme-video" style="display: flex; justify-content: center;">
+    <video width="{{ if .Get "width" }}{{ .Get "width" }}{{ else }}100%{{ end }}" src="{{ .Get "light" }}" class="video-light" autoplay loop muted playsinline></video>
+    <video width="{{ if .Get "width" }}{{ .Get "width" }}{{ else }}100%{{ end }}" src="{{ .Get "dark" }}" class="video-dark" autoplay loop muted playsinline></video>
+</span>
+<span width="100%" style="display:flex; justify-content: center;">
+    <div style="margin-left: 1em; margin-right: 1em; padding-bottom: 1em;"><b>Illustration {{ $count }}:</b> <i>{{ .Get "description"}}</i></div>
+</span>

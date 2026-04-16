@@ -1,0 +1,241 @@
+{{ define "main" }}
+<section class="section container-fluid mt-n3 pb-3">
+  <div class="row justify-content-center">
+    <div class="col-lg-12 text-center">
+      <h1>Disrupting TEEs with</h1>
+      <h1>Interconnect Corruption Attacks (XCA)</h1>
+    </div>
+    <div class="col-lg-9 col-xl-10 text-center">
+      <p class="lead">{{ .Params.lead | safeHTML }}</p>
+      <!-- <a class="btn btn-primary btn-cta rounded-pill btn-lg my-3" href="/docs/{{ if site.Params.doks.docsVersioning }}{{ site.Params.doks.docsVersion }}/{{ end }}guides/example-guide/" role="button">{{ i18n "get_started" }}</a> -->
+    </div>
+  </div>
+</section>
+{{ end }}
+
+{{ define "sidebar-prefooter" }}
+{{ if site.Params.doks.backgroundDots -}}
+<div class="d-flex justify-content-start">
+  <div class="bg-dots" >
+  </div>
+</div>
+{{ end -}}
+
+
+
+<section class="section section-md section-features ">
+
+  <div class="container">
+
+    <div class="row justify-content-center">
+
+      <div class="col-lg-5" >
+        <div class="card-nav d-flex flex-column flex-sm-row" >
+          <div class="card text-end w-100" >
+            
+            <div class="card-body d-flex">
+              <div class="d-flex flex-column me-auto text-center w-100">
+                <div>
+                  <img src="Fabricked-symbol.svg" style="height: 230px; width: auto;">
+                </div>
+                <p></p>
+                <h5 class="h4 card-title my-0"><a href="/fabricked" class="stretched-link text-reset text-decoration-none">Fabricked</a> <br/><span class="h5">(USENIX Sec'26)</span></h5>
+                <p></p>
+                <p>Misconfiguring Infinity Fabric to Break AMD SEV-SNP</p>
+
+              </div>
+              <div class="d-flex flex-column justify-content-center" >
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M5 12l14 0"></path>
+                  <path d="M13 18l6 -6"></path>
+                  <path d="M13 6l6 6"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="card-nav d-flex flex-column flex-sm-row" >
+          <div class="card text-end w-100">
+
+            <div class="card-body d-flex">
+              <div class="d-flex flex-column me-auto text-start text-center w-100">
+                <div>
+
+                  <img src="BreakFast-symbol.svg" style="height: 230px; width: auto;">
+
+                </div>
+                <p></p>
+                <h5 class="h4 card-title my-0"><a href="/breakfast" class="stretched-link text-reset text-decoration-none">BreakFAST</a> <br/><span class="h5">(IEEE S&P'26)</span></h5>
+
+                <p></p>
+                <p>Confused Deputy Attack on Infinity Fabric to Break AMD SEV-SNP</p>
+
+              </div>
+              <div class="d-flex flex-column justify-content-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M5 12l14 0"></path>
+                  <path d="M13 18l6 -6"></path>
+                  <path d="M13 6l6 6"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="col-lg-5">
+        <div class="card-nav d-flex flex-column flex-sm-row" >
+          <div class="card text-end w-100">
+
+            <div class="card-body d-flex">
+              <div class="d-flex flex-column me-auto text-start text-center w-100">
+                <div>
+
+                  <img src="ComingSoonIPromise-symbol.svg" style="height: 230px; width: 100%; object-fit: contain;">
+
+                </div>
+                <p></p>
+                <h5 class="h4 card-title my-0"><a href="/ComingSoonIPromise" class="stretched-link text-reset text-decoration-none">ComingSoonIPromise</a> <br/><span class="h5">(Usenix Sec '26)</span></h5>
+
+                <p></p>
+                <p>Breaking AMD SEV-SNP via Residual Coherency States</p>
+
+              </div>
+              <div class="d-flex flex-column justify-content-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M5 12l14 0"></path>
+                  <path d="M13 18l6 -6"></path>
+                  <path d="M13 6l6 6"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+
+    </div>
+  </div>
+</section>
+
+{{ end }}
+{{ define "sidebar-footer" }}
+<style>
+ .quote-padding {
+   padding: 2rem;
+   /* background-color: red; */
+ }
+ @media only screen and (max-width: 600px) {
+   .quote-padding {
+     padding: 0rem;
+     /* background-color: blue; */
+     padding-top: 1rem;
+     padding-bottom: 1rem;
+   }
+ }
+</style>
+<section class="section section-md container-fluid bg-light">
+  <div class="container">
+    <div class="row justify-content-center" style=''>
+
+{{/*        <div class="col-lg-7" >
+        <div class="d-flex flex-column flex-sm-row" >
+          <div class="card text-end w-100">
+            <div class="card-body d-flex">
+              <div class="d-flex flex-column me-auto text-start">
+                <div style='' class='quote-padding'>
+                  <blockquote style='padding-left: 2rem; padding-top: 0.3rem; padding-bottom: 0rem; ' >
+                    <em>Defining</em>
+                    <div style=''>
+                      <div style='height: 100%; float: left; margin-top: 1.4rem;'>
+                        <i class="fas fa-volume-up fa-2x" class="volume" onclick="playSound()" style='cursor: pointer;'></i>
+                      </div>
+                      <div style='margin-left: 6rem;'>
+                        <h2 id="xca-attack-1">XCA<a href="#xca-attack-1" class="anchor" aria-hidden="true"></a> </h2>
+                        <p>/X-C-A</p>
+                      </div>
+                    </div>
+                    <div>
+                      <em>noun <br/></em>
+                      <ul>
+                        stands for Interconnect corruption attacks.
+                        &nbsp;
+                      </ul>
+                    </div>
+                  </blockquote>
+                  <audio id="xca-attack-sound"></audio>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+       function playSound() {
+         audio = new Audio("/xca-attack-audio.mp3");
+         audio.play();
+       }
+      </script>  */}}
+
+      <div class="col-lg-7">
+        <div class="d-flex flex-column flex-sm-row" >
+          <div class="card text-end w-100">
+            <div class="card-body d-flex">
+              <div class="d-flex flex-column me-auto text-start  ">
+                <div style='padding-left: 2rem;padding-right: 2rem; padding-bottom: 1rem;'>
+                  <h2>Why the name XCA?</h2>
+                  XCA stands for Interconnect Corruption Attacks. It is a family of attacks where an attacker manipulates the interconnect to corrupt data and control flow between System on Chip components to compromise TEEs.
+                  <!-- <a style='' class="btn btn-primary btn-cta rounded-pill btn-lg my-3" href="/docs/{{ if site.Params.doks.docsVersioning }}{{ site.Params.doks.docsVersion }}/{{ end }}guides/example-guide/" role="button">Tell Me More</a> -->
+                  <p></p>
+                  <a style='' class="btn w-100 btn-primary btn-cta rounded-pill btn-lg my-3" href="/overview" role="button">Tell Me More</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{{/*  <section class="section section-md container-fluid">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10" >
+        <div class="" >
+          <div class="card text-end w-100">
+            <div class="card-body d-flex">
+              <div class="w-100 d-flex flex-column me-auto text-start text-center ">
+                <div>
+                  <iframe class='w-100' style='min-height: 500px'  src="https://www.youtube.com/embed/a1_7Dvbj-Qw?si=ovEGwpNozgE4dkGu&mute=1&rel=0" title="XCA Attack" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                  <p style='margin-top: 0.5rem; margin-bottom: -0.2rem;'>XCA Attack: An Analogy</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-10" >
+        <div class="" >
+          <div class="card text-end w-100">
+            <div class="card-body d-flex">
+              <div class="w-100 d-flex flex-column me-auto text-start text-center ">
+                <div>
+                  <iframe class='w-100' style='min-height: 500px' src="https://www.youtube.com/embed/UR8uhhOFer0?si=Dp2goobvPGvSSKUb&rel=0" title="XCA Attack" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                  <p style='margin-top: 0.5rem; margin-bottom: -0.2rem;'>XCA Attack: An Explainer</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  */}}
+{{ end }}

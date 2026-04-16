@@ -1,0 +1,21 @@
+[data-bs-theme="dark"] .img-light,
+[data-bs-theme="dark"] .video-light {
+  display: none;
+}
+
+[data-bs-theme="dark"] .img-dark,
+[data-bs-theme="dark"] .video-dark {
+  display: inline;
+}
+
+[data-bs-theme="light"] .img-dark,
+[data-bs-theme="light"] .video-dark {
+  display: none;
+}
+
+[data-bs-theme="light"] .img-light,
+[data-bs-theme="light"] .video-light {
+  display: inline;
+}
+
+

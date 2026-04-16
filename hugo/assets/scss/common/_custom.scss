@@ -1,0 +1,303 @@
+// Put your custom SCSS code here
+
+// Ensure Light Mode colors are applied (Beige-ish, less yellow)
+[data-bs-theme="light"] {
+  body {
+    background-color: $body-bg;
+    color: $body-color;
+  }
+  h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: $headings-color;
+  }
+  .bg-light {
+    background-color: darken($body-bg, 3%) !important;
+    color: $body-color;
+  }
+  .card {
+    background-color: $body-bg;
+    border-color: darken($body-bg, 10%);
+    color: $body-color;
+  }
+  // Distinct color for the 3 attack cards (Sandier beige)
+  .card-nav .card {
+    background-color: #ede4d0 !important; // Sandier Beige
+    border-color: #e0d4bc !important;
+  }
+  .card-nav .card:hover {
+    background-color: #e0d4bc !important;
+    border-color: #d1c1a5 !important;
+  }
+  .card h2, .card h3, .card h4, .card h5 {
+    color: $headings-color !important;
+  }
+  .card-body {
+    color: $body-color !important;
+  }
+  .card p {
+    color: $body-color !important;
+  }
+  .navbar, .doks-subnavbar {
+    background-color: rgba($navbar-bg-light, 0.95) !important;
+    border-bottom: 1px solid darken($navbar-bg-light, 10%);
+  }
+  a {
+    color: $link-color;
+  }
+  a:hover {
+    color: $link-hover-color;
+  }
+  blockquote {
+    color: $body-color;
+    border-left: 3px solid darken($body-bg, 15%);
+  }
+  .btn-primary {
+    background-color: $primary;
+    border-color: $primary;
+    color: #fbf1c7 !important;
+  }
+  .btn-primary:hover {
+    background-color: darken($primary, 10%);
+    border-color: darken($primary, 10%);
+    color: #fbf1c7 !important;
+  }
+}
+
+// Ensure Gruvbox Dark Mode colors are applied
+@include color-mode(dark) {
+  body {
+    background-color: $body-bg-dark;
+    color: $body-color-dark;
+  }
+  h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: $headings-color-dark;
+  }
+  .bg-light {
+    background-color: lighten($body-bg-dark, 5%) !important;
+    color: $body-color-dark;
+  }
+  .card {
+    background-color: lighten($body-bg-dark, 2%);
+    border-color: $border-dark;
+    color: $body-color-dark;
+  }
+  // Distinct color for the 3 attack cards
+  .card-nav .card {
+    background-color: #3c3836 !important;
+    border-color: #504945 !important;
+  }
+  .card-nav .card:hover {
+    background-color: #504945 !important;
+    border-color: #665c54 !important;
+  }
+  .card-body {
+    color: $body-color-dark;
+  }
+  .navbar, .doks-subnavbar {
+    background-color: rgba($body-bg-dark, 0.95) !important;
+    border-bottom: 1px solid $border-dark;
+  }
+  .bg-dots {
+    background-image: radial-gradient($dots-dark 15%, transparent 15%);
+  }
+  a {
+    color: $link-color-dark;
+  }
+  a:hover {
+    color: lighten($link-color-dark, 10%);
+  }
+  .btn-primary {
+    background-color: $link-color-dark;
+    border-color: $link-color-dark;
+    color: $body-bg-dark !important;
+  }
+  .btn-primary:hover {
+    background-color: lighten($link-color-dark, 10%);
+    border-color: lighten($link-color-dark, 10%);
+    color: $body-bg-dark !important;
+  }
+  blockquote {
+    color: $body-color-dark;
+    border-left: 3px solid $border-dark;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+h2, h3, h4, h5, h6 {
+  scroll-margin-top: 80px;
+}
+
+.page-nav {
+    display: none !important;
+}
+
+.head-button {
+    min-width: 14rem;
+    @media screen and (min-width: 1200px) and (max-width: 1400px) {
+        min-width: 10rem;
+    }
+}
+
+.docs-content p a, .docs-content li a, .content article p a, .content article li a {
+     text-decoration: underline;
+}
+
+// FAQ (details/summary) highlighting
+details {
+  padding: 0; // Reset padding to handle it in summary and body
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+summary {
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+  position: relative;
+  display: block; // Override Doks inline-block
+  width: 100%; // Override Doks calc
+  margin: 0; // Override Doks negative margins
+}
+
+summary:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+details[open] {
+  background-color: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+details[open] > summary {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+details > div, 
+details > p, 
+details > ul, 
+details > ol {
+  padding: 1rem 1.25rem;
+  margin: 0;
+}
+
+// Dark mode overrides
+@include color-mode(dark) {
+  details {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  details[open] {
+    background-color: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  summary:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+  
+  details[open] > summary {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+// Citation Box
+.citation-box {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #fdf6e3; // Solarized Base3 (Beige-ish)
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.citation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #586e75;
+}
+
+.citation-content {
+  padding: 1rem;
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  background-color: transparent;
+  border: none;
+  color: #586e75;
+  
+  code {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    color: inherit;
+    padding: 0;
+    background-color: transparent;
+  }
+}
+
+.btn-copy-citation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  color: #586e75;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.2);
+  }
+
+  &.copied {
+    border-color: #859900; // Solarized Green
+    color: #859900;
+  }
+}
+
+// Dark mode citation box
+@include color-mode(dark) {
+  .citation-box {
+    background-color: #282828; // Gruvbox dark0
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .citation-header {
+    background-color: rgba(255, 255, 255, 0.03);
+    border-bottom-color: rgba(255, 255, 255, 0.05);
+    color: $body-color-dark;
+  }
+
+  .citation-content {
+    color: $body-color-dark;
+  }
+
+  .btn-copy-citation {
+    border-color: rgba(255, 255, 255, 0.1);
+    color: $body-color-dark;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+}

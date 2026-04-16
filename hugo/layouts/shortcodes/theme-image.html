@@ -1,0 +1,11 @@
+{{ .Page.Scratch.Add "illustration_count" 1 -}}
+{{ $count := .Page.Scratch.Get "illustration_count" -}}
+<span class="theme-image" style="display: flex; justify-content: center;">
+    <img width="{{ if .Get "width" }}{{ .Get "width" }}{{ else }}100%{{ end }}" src="{{ .Get "light" }}" class="img-light" alt="{{ .Get "alt" }}">
+    <img width="{{ if .Get "width" }}{{ .Get "width" }}{{ else }}100%{{ end }}" src="{{ .Get "dark" }}" class="img-dark" alt="{{ .Get "alt" }}">
+</span>
+<span width="100%" style="display:flex; justify-content: center;">
+    <div style="margin-left: 1em; margin-right: 1em; padding-bottom: 1em;"><b>Illustration {{ $count }}:</b> <i>{{ .Get "description"}}</i></div>
+</span>
+
+<!-- {{ if .Get "param1" }}{{ .Get "param1" }}{{ else }}defaultformyvar{{ end }} -->
