@@ -43,7 +43,7 @@ Modifications to the Control Fabric has direct consequences for component behavi
     alt="Infinity Fabric with the Data Fabric and Control Fabric planes."
     description="The Control Fabric acts as a configuration space for all components on the platform. The Data Fabric handles the data movement between those components.">}}
 
-Together, these two planes ensure reliable and fast interaction between system components. Thus, corruptuion of these planes can not only undermine functionality but also break platform security.
+Together, these two planes ensure reliable and fast interaction between system components. Thus, corruption of these planes can not only undermine functionality but also break platform security.
 
 ## Confidential Computing
 
