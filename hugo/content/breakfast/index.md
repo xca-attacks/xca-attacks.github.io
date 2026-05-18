@@ -26,18 +26,18 @@ seo:
    <!-- <img src="/fabricked.png" class='w-10' style='margin-bottom: -1rem'> -->
 </div>
 <h1 class='h1'>BreakFAST</h1>
-<p class="lead">Confused Deputy Attack on Infinity Fabric to Break AMD SEV-SNP <br/> (<a href='https://sp2026.ieee-security.org/'>IEEE S&P 2026</a>)</p>
+<p class="lead">Confused Deputy Attack on Infinity Fabric to Break AMD SEV-SNP <br/> (<a href='https://sp2026.ieee-security.org/'>IEEE S&P 2026</a>, Distinguished Paper Award)</p>
 <div class="row justify-content-center">
   <div class="col-lg-5 col-sm-6  text-center  go-button" style="margin-top: 1.2rem">
     <div class="d-flex flex-column flex-sm-row w-100 text-center">
       <a class="btn btn-primary btn-cta rounded-pill btn-lg head-button" href="/breakfast/breakfast_oakland26.pdf" role="button">Paper</a>
     </div>
   </div>
-  <!-- <div class="col-lg-5 col-sm-6  go-button" style="margin-top: 1.2rem">
+  <div class="col-lg-5 col-sm-6  go-button" style="margin-top: 1.2rem">
     <div class="d-flex flex-column flex-sm-row" >
-      <a class="btn btn-primary btn-cta rounded-pill btn-lg head-button" href="https://github.com/xca-attacks/BreakFAST" role="button">Source</a>
+      <a class="btn btn-primary btn-cta rounded-pill btn-lg head-button" href="https://github.com/xca-attacks/breakfast" role="button">Source</a>
     </div>
-  </div> -->
+  </div>
 <div class="col-lg-5 col-sm-6 go-button " style="margin-top: 1.2rem">
     <div class="d-flex flex-column flex-sm-row" >
       <a class="btn btn-primary btn-cta rounded-pill btn-lg head-button" href="#citation" role="button">Citation</a>
