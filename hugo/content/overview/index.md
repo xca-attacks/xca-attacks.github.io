@@ -1,10 +1,14 @@
 ---
-title: "Overview of XCA"
+title: "Overview"
 description: ""
 summary: ""
 date: 2026-04-12T00:04:48+02:00
 lastmod: 2026-04-12T00:04:48+02:00
 draft: false
+menu:
+  docs:
+    parent: ""
+    identifier: "overview"
 weight: 5
 toc: true
 contributors: []
@@ -38,8 +42,8 @@ Modifications to the Control Fabric has direct consequences for component behavi
 
 {{< theme-image
     width="90%"
-    light="./typst-illustrations/infinity-fabric-light.svg"
-    dark="./typst-illustrations/infinity-fabric-dark.svg"
+    light="./typst-illustrations/infinity-fabric-light-1.svg"
+    dark="./typst-illustrations/infinity-fabric-dark-1.svg"
     alt="Infinity Fabric with the Data Fabric and Control Fabric planes."
     description="The Control Fabric acts as a configuration space for all components on the platform. The Data Fabric handles the data movement between those components.">}}
 
@@ -81,6 +85,7 @@ interconnect, as shown in Illustration 2.
 List of XCA instances:
 * [Fabricked](/fabricked/): reconfigure Data Fabric routing to tamper with RMP initialization
 * [BreakFAST](/breakfast/): redirect PSP writes to on-chip components to hijack the Control Fabric
+* [Staleus](/staleus/): modify Infinity Fabric to make PSP non memory coherent
 
 ## The Broader Challenge
 

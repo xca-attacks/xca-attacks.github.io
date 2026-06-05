@@ -22,7 +22,7 @@ seo:
 
 <div class='text-center' style='padding-bottom: 3rem;'>
 <div>
-   <img src="/BreakFast-symbol.svg" class='' style='margin-top: 2rem; margin-bottom: -1rem; width: 300px;'>
+   <img src="/BreakFast-symbol.svg" class='' style='margin-top: 3rem; margin-bottom: 1rem; height: 250px; width: auto;'>
    <!-- <img src="/fabricked.png" class='w-10' style='margin-bottom: -1rem'> -->
 </div>
 <h1 class='h1'>BreakFAST</h1>

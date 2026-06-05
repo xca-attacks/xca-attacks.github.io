@@ -37,11 +37,11 @@
 # url = "/docs/1.0/prologue/introduction/"
   weight = 20
 
-# [[main]]
-#   name = "ComingSoonIPromise"
-#   identifier = "ComingSoonIPromise"
-#   url = "/ComingSoonIPromise"
-#   weight = 30  
+[[main]]
+  name = "Staleus"
+  identifier = "staleus"
+  url = "/staleus/"
+  weight = 30  
 
 [[main]]
   name = "Media"
