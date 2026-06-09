@@ -82,11 +82,11 @@ In more detail, AMD Zen CPUs employ so-called bridges that translate between dif
     alt="Simplified data path for PSP memory requests"
     description="Simplified data path for PSP memory requests.">}}
 
-Illustration 3 visualizes this data flow from the PSP through the SYSHUB to the Data Fabric. Because the translation from AXI to SDP is not a one-to-one mapping, and given that data and control signals possess differing widths, the SYSHUB must aggregate specific AXI data lines or synthesize new SDP-specific signals. The configuration for the SYSHUB exposes control bits that define how the cache coherence attributes propagate to the SDP interface. Modifying this configuration alters the memory coherence properties of the PSP with respect to x86 DRAM. PSP memory requests tagged with the NoSnoop attribute result in the transactions ignoring dirty data in theresiding in x86 caches.
+Illustration 3 visualizes this data flow from the PSP through the SYSHUB to the Data Fabric. Because the translation from AXI to SDP is not a one-to-one mapping, and given that data and control signals possess differing widths, the SYSHUB must aggregate specific AXI data lines or synthesize new SDP-specific signals. The configuration for the SYSHUB exposes control bits that define how the cache coherence attributes propagate to the SDP interface. Modifying this configuration alters the memory coherence properties of the PSP with respect to x86 DRAM. PSP memory requests tagged with the NoSnoop attribute result in the transactions ignoring dirty data in residing in x86 caches.
 
 
 ### Attack Complexity
-Staleus operates as a software-only exploit with a 100% success probability. It does not require single-stepping, any code running inside the victim CVM, or physical access to the hardware.
+Staleus operates as a software-only exploit with a 100% success probability. It does not require single-stepping, any specific code running inside the victim CVM, or physical access to the hardware.
 
 ## Affected Hardware
 We confirmed the vulnerability on AMD Zen 4 and Zen 5 EPYC processors running SEV-SNP. The two specific CPU models evaluated are listed below.
@@ -119,7 +119,7 @@ We confirmed the vulnerability on AMD Zen 4 and Zen 5 EPYC processors running SE
 {{< /details >}}
 
 {{< details "Q: What was the response from AMD?" >}}
-- AMD acknowledged the vulnerability and assigned CVE-2025-54509.
+- AMD acknowledged the vulnerability and assigned CVE-2025-54509. You can find more information on their advisory page [https://www.amd.com/en/resources/product-security/bulletin/amd-sb-3039.html](https://www.amd.com/en/resources/product-security/bulletin/amd-sb-3039.html).
 {{< /details >}}
 
 {{< details "Q: Does this have implications on Arm CCA or Intel TDX?" >}}
