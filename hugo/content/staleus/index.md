@@ -55,8 +55,8 @@ Standard cloud environments expose tenant computation and data in use to potenti
 Modern heterogeneous computing platforms contain distinct components, CPU cores, I/O peripherals, and co-processors like the PSP. These components all share access to the same physical DRAM. Memory coherence ensures that every components sees a consistent view of memory, regardless of what data may be cached locally. Without coherence, one component could read stale data from DRAM while another holds a more recent version in its cache, leading to inconsistencies.
 
 {{< theme-image
-    light="./figures/coherence-light-1.svg"
-    dark="./figures/coherence-dark-1.svg"
+    light="./figures/coherence-light.svg"
+    dark="./figures/coherence-dark.svg"
     alt="High level overview of the Staleus Attack"
     description="Memory coherence mechanism on AMD Zen platforms.">}}
 
@@ -67,17 +67,12 @@ In the confidential computing threat model, the hypervisor is untrusted and pote
 
 This allows the attacker to induce a split memory view: the PSP operates on stale DRAM data while x86 cores hold divergent, more recent values in their caches. Staleus exploits this divergence in two ways. First, when the PSP reads DRAM, it retrieves stale data that does not reflect recent x86 cache writes. Second, when the PSP writes to DRAM, a subsequent x86 cache eviction silently overwrites the PSP-committed data. We leverage these primitives to forge the Guest Context Page, a PSP-protected structure holding the CVM attestation report and GuestPolicy fields, enabling the hypervisor to activate debug mode on a production CVM and gain arbitrary read and write access to CVM memory.
 
-{{< theme-image
-    light="./figures/staleus-light-1.svg"
-    dark="./figures/staleus-dark-1.svg"
+{{< theme-video
+    light="./animations/staleus-light.mp4"
+    dark="./animations/staleus-dark.mp4"
     alt="High level overview of the Staleus Attack"
-    description="PSP writes to DRAM, but the Coherency Controller does not sent snoop requests">}}
+    description="PSP writes to DRAM, but the Coherency Controller does not ensure cache coherence. A subsequent cache flush overwrites PSP written data.">}}
 
-{{< theme-image
-    light="./figures/staleus-light-2.svg"
-    dark="./figures/staleus-dark-2.svg"
-    alt="High level overview of the Staleus Attack"
-    description="A subsequent cache flush overwrites the PSP-committed data">}}
 
 ### What went wrong?
 Staleus is possible because security-critical configuration for the platform's most privileged component, the PSP, is partially accessible and writable by kernel-mode x86 cores, i.e., a malicious hypervisor. The hypervisor can toggle the NoSnoop attribute on PSP memory transactions after SEV-SNP is fully active. AMD fails to enforce that unprivileged components cannot alter the data flow configuration of higher-privileged ones.

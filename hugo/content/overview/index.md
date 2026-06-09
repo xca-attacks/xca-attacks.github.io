@@ -42,8 +42,8 @@ Modifications to the Control Fabric has direct consequences for component behavi
 
 {{< theme-image
     width="90%"
-    light="./typst-illustrations/infinity-fabric-light-1.svg"
-    dark="./typst-illustrations/infinity-fabric-dark-1.svg"
+    light="./typst-illustrations/infinity-fabric-light.svg"
+    dark="./typst-illustrations/infinity-fabric-dark.svg"
     alt="Infinity Fabric with the Data Fabric and Control Fabric planes."
     description="The Control Fabric acts as a configuration space for all components on the platform. The Data Fabric handles the data movement between those components.">}}
 

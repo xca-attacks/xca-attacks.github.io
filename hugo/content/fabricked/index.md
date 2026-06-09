@@ -60,8 +60,8 @@ Standard cloud environments expose tenant computation and data in use to potenti
 Modern AMD System-on-Chips (SoCs) use a chiplet-based architecture. The core idea is to manufacture individual CPU blocks on separate dies and link them together via a high-speed interconnect. While this design significantly improves manufacturing yields, it also introduces complexity in inter-component communication. AMD addresses this with the Infinity Fabric, which is responsible for coherent data transport, memory routing, and address mapping across CPU cores, memory controllers, and peripheral devices. Because platform configurations vary between different systems and boot sequences, the Infinity Fabric must be dynamically configured during every CPU boot sequence. AMD delegates parts of this configuration process to the motherboard firmware, also known as BIOS or UEFI.
 
 {{< theme-image
-    light="./typst-illustrations/fabric-overview-light-1.svg"
-    dark="./typst-illustrations/fabric-overview-dark-1.svg"
+    light="./typst-illustrations/fabric-overview-light.svg"
+    dark="./typst-illustrations/fabric-overview-dark.svg"
     alt="High level overview of the Infinity Fabric"
     description="Schematic overview of the Infinity Fabric.">}}
 
@@ -74,8 +74,8 @@ The attacker, i.e., a malicious hypervisor, can therefore modify the Infinity Fa
 
 {{< theme-image
     width="60%"
-    light="./typst-illustrations/attack-overview-light-1.svg"
-    dark="./typst-illustrations/attack-overview-dark-1.svg"
+    light="./typst-illustrations/attack-overview-light.svg"
+    dark="./typst-illustrations/attack-overview-dark.svg"
     alt="High level overview of the Fabricked Attack"
     description="High-level overview of the Fabricked attack: during SNP_INIT the attacker maliciously misroutes the security co-processor writes to DRAM. This results in an RMP with insecure default entries.">}}
 

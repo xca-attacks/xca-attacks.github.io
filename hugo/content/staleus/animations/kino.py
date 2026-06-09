@@ -1,0 +1,502 @@
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#   "pypdf"
+# ]
+# ///
+
+from pypdf import PdfWriter
+from string import Template
+import argparse
+import base64
+import json
+import mimetypes
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+import tomllib
+
+def assert_installed(program: str):
+    if shutil.which(program) is None:
+        raise RuntimeError(f"Failed to run {program}. Is {program} installed?")
+
+def create_parser():
+    parser = argparse.ArgumentParser(
+        description="Utility for creating animations",
+        formatter_class=argparse.RawTextHelpFormatter,
+        epilog="""
+Examples:
+  kino.py slides
+  kino.py --timeout 20 slides
+  kino.py video --cut none --fps 24 --ppi 150
+  kino.py --root ./project revealjs --cut scene
+"""
+    )
+    parser.add_argument(
+        "--root",
+        help="Typst root directory"
+    )
+
+    parser.add_argument(
+        "--timeout",
+        type=int,
+        default=30,
+        help="timeout (default: 30s)"
+    )
+
+    parser.add_argument(
+        "input",
+        help="input Typst file",
+    )
+    
+    # Create subparsers for different commands
+    subparsers = parser.add_subparsers(
+        dest="output format",
+        help="output format",
+        metavar="ouput",
+        required=True
+    )
+
+    # create parent parser
+    parent_parser = argparse.ArgumentParser(add_help=False)
+    
+    # =====================
+    # slides subcommand
+    # =====================
+    slides_parser = subparsers.add_parser(
+        "slides",
+        help="pdf output",
+        parents=[parent_parser]
+    )
+
+    # create subparent parser
+    subparent_parser = argparse.ArgumentParser(add_help=False)
+
+    subparent_parser.add_argument(
+        "--cut",
+        choices=["all", "none", "scene"],
+        default="all",
+        help="cuts to consider (default: all)"
+    )
+    
+    subparent_parser.add_argument(
+        "--fps",
+        type=int,
+        default=30,
+        help="frames per second (default: 30)"
+    )
+    
+    subparent_parser.add_argument(
+        "--ppi",
+        type=int,
+        default=144,
+        help="pixels per inch (default: 144)"
+    )
+    
+    slides_parser.set_defaults(func=handle_slides)
+    
+    # =====================
+    # video subcommand
+    # =====================
+    video_parser = subparsers.add_parser(
+        "video",
+        help="video output",
+        parents=[subparent_parser]
+    )
+    
+    video_parser.add_argument(
+        "--format",
+        type=str,
+        default="mp4",
+        help="ouput video format (default: mp4)"
+    )
+    
+    video_parser.set_defaults(func=handle_video)
+    
+    # =====================
+    # revealjs subcommand
+    # =====================
+    revealjs_parser = subparsers.add_parser(
+        "revealjs",
+        help="reveal.js output",
+        parents=[subparent_parser]
+    )
+
+    revealjs_parser.add_argument(
+        "--title",
+        type=str,
+        help="title of the presentation"
+    )
+
+    revealjs_parser.add_argument(
+        "--progress",
+        action=argparse.BooleanOptionalAction,
+        default =  False,
+        help="display a progress bar"
+    )
+
+    revealjs_parser.add_argument(
+        "--template",
+        type=str,
+        default="bin/revealjs.html",
+        help="revealjs template"
+    )
+
+    revealjs_parser.set_defaults(func=handle_revealjs)
+    
+    return parser
+
+def handle_slides(args):
+    """Handle slides subcommand"""
+    
+    assert_installed("typst")
+    
+    scenes = []
+
+    dir_path = os.path.dirname(args.input)
+    root_path, ext = os.path.splitext(args.input)
+
+    if ext == ".toml":
+        with open(args.input, 'rb') as f:
+            data = tomllib.load(f)
+            scenes = data["scenes"] 
+    else:
+        scenes.append(os.path.basename(args.input))
+
+    total_scenes = len(scenes)
+
+    try:
+        with tempfile.TemporaryDirectory() as tmpdir:
+
+            merger = PdfWriter()
+
+            for index, input in enumerate(scenes):
+                output = os.path.join(tmpdir, f"output{index}.pdf")
+                cmd = [
+                    "typst",
+                    "compile",
+                    os.path.join(dir_path, input),
+                    "--input", "fps=0",
+                    "--input", f"scene={index+1}",
+                    "--input", f"total_scenes={total_scenes}",
+                    output
+                ]
+                if args.root is not None:
+                    cmd += ["--root", os.path.abspath(args.root)]
+    
+                subprocess.run(cmd, timeout = args.timeout)
+
+                merger.append(output)
+            merger.write(f"{root_path}.pdf")
+        
+    except subprocess.TimeoutExpired:
+        print(f"Timeout after {args.timeout} seconds.\nhint: timeout can be increased using the --timeout option.")
+        return 124
+        
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return 1
+    
+    return 0
+
+def handle_video(args):
+    """Handle video subcommand"""
+
+    assert_installed("typst")
+    assert_installed("ffmpeg")
+
+    scenes = []
+
+    dir_path = os.path.dirname(args.input)
+    root_path, ext = os.path.splitext(args.input)
+    output = f"{root_path}.{args.format}"
+
+    if ext == ".toml":
+        with open(args.input, 'rb') as f:
+            data = tomllib.load(f)
+            scenes = data["scenes"] 
+    else:
+        scenes.append(os.path.basename(args.input))
+
+    total_scenes = len(scenes)
+
+    try:    
+        with tempfile.TemporaryDirectory() as tmpdir:
+
+            for index, input in enumerate(scenes):
+                cmd1 = [
+                    "typst",
+                    "compile",
+                    "--input", f"fps={args.fps}",            
+                    "--input", f"scene={index+1}",
+                    "--input", f"total_scenes={total_scenes}",
+                    os.path.join(dir_path, input),
+                    os.path.join(tmpdir, f"output{index}_"+"{0p}.png"),
+                    "--ppi", f"{args.ppi}"
+                ]
+                if args.root is not None:
+                    cmd1 += ["--root", os.path.abspath(args.root)] 
+
+                subprocess.run(cmd1, timeout = args.timeout, check = True)
+
+            if args.cut == "none":
+                cmd2 = [
+                    "ffmpeg",
+                    "-y",
+                    "-loglevel", "error",
+                    "-r", f"{args.fps}",
+                    "-pattern_type", "glob", 
+                    "-i", f"{os.path.join(tmpdir, "output*.png")}",
+                    "-r", f"{args.fps}",
+                    output
+                ]
+                subprocess.run(cmd2, timeout = args.timeout)
+
+            elif args.cut == "scene":
+                for index, input in enumerate(scenes):
+                    if total_scenes != 1:
+                        output = f"{root_path}{index+1}.{args.format}"
+                    cmd2 = [
+                        "ffmpeg",
+                        "-y",
+                        "-loglevel", "error",
+                        "-r", f"{args.fps}",
+                        "-pattern_type", "glob", 
+                        "-i", f"{os.path.join(tmpdir, f"output{index}_*.png")}",
+                        "-r", f"{args.fps}",
+                        output
+                    ]
+                    subprocess.run(cmd2, timeout = args.timeout)
+
+            elif args.cut == "all":
+                for index, input in enumerate(scenes):
+                    cmd2 = [
+                        "typst",
+                        "query",                        
+                        os.path.join(dir_path, input),
+                        "--input", f"fps={args.fps}",
+                        "--input", f"scene={index+1}",
+                        "--input", f"total_scenes={total_scenes}",
+                        "--input", "query=1",
+                        "metadata", 
+                        "--field", "value"
+                    ]
+                    if args.root is not None:
+                        cmd2 += ["--root", os.path.abspath(args.root)] 
+
+                    result = subprocess.run(cmd2, timeout = args.timeout, capture_output=True, text=True, check = True)
+                    data = json.loads(result.stdout)
+                    data = [d["kino"] for d in data if "kino" in d]
+                    
+                    for item in data:
+                        output = f"{root_path}{index+1}_{item['segment']}.{args.format}"
+                        if total_scenes == 1:
+                            output = f"{root_path}{item['segment']}.{args.format}"
+                            if len(data) == 1:
+                                output = f"{root_path}.{args.format}"
+                        cmd = [
+                            "ffmpeg",
+                            "-y",                        
+                            "-loglevel", "error",
+                            "-r", str(item['fps']),
+                            "-pattern_type", "glob",
+                            "-i", f"{os.path.join(tmpdir, f"output{index}_*.png")}",
+                            "-vf", f"select='gte(n,{item['from']})'",
+                            "-frames:v", str(item['frames']),
+                            "-r", str(item['fps']),
+                            output
+                        ]
+                        
+                        result = subprocess.run(cmd, timeout = args.timeout, check = True)
+                        
+    except subprocess.TimeoutExpired:
+        print(f"Timeout after {args.timeout} seconds.\nhint: timeout can be increased using the --timeout option.")
+        return 124
+
+    except subprocess.CalledProcessError:
+        print("The above exception was raised during conversion.")
+        
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return 1
+
+    return 0
+
+def handle_revealjs(args):
+    """Handle revealjs subcommand"""
+    
+    assert_installed("typst")
+    assert_installed("ffmpeg")
+
+    scenes = []
+
+    dir_path = os.path.dirname(args.input)
+    root_path, ext = os.path.splitext(args.input)
+    prespath = f"{root_path}.html"
+    title = args.title
+    if title is None:
+        title = os.path.splitext(os.path.basename(args.input))[0]
+
+    if ext == ".toml":
+        with open(args.input, 'rb') as f:
+            data = tomllib.load(f)
+            scenes = data["scenes"] 
+    else:
+        scenes.append(os.path.basename(args.input))
+
+    total_scenes = len(scenes)
+   
+    try:    
+        with tempfile.TemporaryDirectory() as tmpdir:
+            for index, input in enumerate(scenes):
+                cmd1 = [
+                    "typst",
+                    "compile",
+                    "--input", f"fps={args.fps}",            
+                    "--input", f"scene={index+1}",
+                    "--input", f"total_scenes={total_scenes}",
+                    os.path.join(dir_path, input),
+                    os.path.join(tmpdir, f"output{index}_"+"{0p}.png"),
+                    "--ppi", f"{args.ppi}"
+                ]
+                if args.root is not None:
+                    cmd1 += ["--root", os.path.abspath(args.root)] 
+
+                subprocess.run(cmd1, timeout = args.timeout, check = True)
+
+            if args.cut == "none":
+                output = os.path.join(tmpdir, "segment.mp4")
+                cmd2 = [
+                    "ffmpeg",
+                    "-y",
+                    "-loglevel", "error",
+                    "-r", f"{args.fps}",
+                    "-pattern_type", "glob", 
+                    "-i", f"{os.path.join(tmpdir, "output*.png")}",
+                    "-r", f"{args.fps}",
+                    output
+                ]
+
+                subprocess.run(cmd2, timeout = args.timeout)
+
+                content = f"<section data-background-video=\"{video_to_data_uri(output)[0]}\" data-background-size=\"contain\"></section>"
+                navigation = "default"
+
+            elif args.cut == "scene":
+
+                content = ""
+                navigation = "default"
+                
+                for index, _ in enumerate(scenes):
+                    output = os.path.join(tmpdir, f"segment{index}.mp4")
+                    cmd2 = [
+                        "ffmpeg",
+                        "-y",
+                        "-loglevel", "error",
+                        "-r", f"{args.fps}",
+                        "-pattern_type", "glob", 
+                        "-i", f"{os.path.join(tmpdir, f"output{index}_*.png")}",
+                        "-r", f"{args.fps}",
+                        output
+                    ]
+                    subprocess.run(cmd2, timeout = args.timeout)
+
+                    content += f"\n<section data-background-video=\"{video_to_data_uri(output)[0]}\" data-background-size=\"contain\"></section>"
+                    
+            elif args.cut == "all":
+
+                content = ""
+                navigation = "default"
+                
+                for index, input in enumerate(scenes):
+
+                    content+="<section>\n"
+                    
+                    output = os.path.join(tmpdir, f"segment{index}.mp4")
+                    cmd2 = [
+                        "typst",
+                        "query",     
+                        os.path.join(dir_path, input),
+                        "--input", f"fps={args.fps}",
+                        "--input", "query=1",
+                        "--input", f"scene={index+1}",
+                        "--input", f"total_scenes={total_scenes}",
+                        "metadata", 
+                        "--field", "value"
+                    ]
+                    if args.root is not None:
+                        cmd2 += ["--root", os.path.abspath(args.root)] 
+
+                    result = subprocess.run(cmd2, timeout = args.timeout, capture_output=True, text=True, check = True)
+                    data = json.loads(result.stdout)
+                    data = [d["kino"] for d in data if "kino" in d]
+                    
+                    for item in data:
+                        output = os.path.join(tmpdir, f"segment{item['segment']}.mp4")
+                        cmd = [
+                            "ffmpeg",
+                            "-y",                        
+                            "-loglevel", "error",
+                            "-r", str(item['fps']),
+                            "-pattern_type", "glob",
+                            "-i", f"{os.path.join(tmpdir, f"output{index}_*.png")}",
+                            "-vf", f"select='gte(n,{item['from']})'",
+                            "-frames:v", str(item['frames']),
+                            "-r", str(item['fps']),
+                            output
+                        ]
+            
+                        result = subprocess.run(cmd, timeout = args.timeout, check = True)
+            
+                        content += f"\n<section data-background-video=\"{video_to_data_uri(output)[0]}\" data-background-size=\"contain\" {"data-background-video-loop" if item["loop"] else ""}></section>"
+
+                    content += "\n</section>\n"
+
+            parameters = {"title": title,
+                          "content": content,
+                          "navigation": navigation,
+                          "progress": "true" if args.progress else "false"}
+    
+            with open(args.template, 'r') as f:
+                template = Template(f.read())
+                result = template.substitute(parameters)
+            with open(prespath, 'w') as f:
+                f.write(result)
+                       
+    except subprocess.TimeoutExpired:
+        print(f"Timeout after {args.timeout} seconds.\nhint: timeout can be increased using the --timeout option.")
+        return 124
+
+    except subprocess.CalledProcessError:
+        print("The above exception was raised during conversion.")
+        
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return 1
+
+    return 0
+
+def video_to_data_uri(video_path):
+    """Convert video file to data URI"""
+    # Get MIME type
+    mime_type, _ = mimetypes.guess_type(video_path)
+    if not mime_type:
+        mime_type = 'video/mp4'  # Default fallback
+    # Read and encode video
+    with open(video_path, 'rb') as video_file:
+        video_data = video_file.read()
+    # Base64 encode
+    base64_data = base64.b64encode(video_data).decode('utf-8')
+    # Create data URI
+    data_uri = f"data:{mime_type};base64,{base64_data}"
+    return data_uri, len(video_data)
+
+def main():
+    parser = create_parser()
+    pargs = parser.parse_args()
+    return pargs.func(pargs)
+
+if __name__ == "__main__":
+    sys.exit(main())
