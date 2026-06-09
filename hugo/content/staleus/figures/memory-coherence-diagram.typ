@@ -42,7 +42,7 @@
       )
 
       // PSP, CS, UMC
-      node((rel: (3.2cm, -2.4cm), to: <SoC>), name: <psp>, stroke: fg, fill: psp_bg, width: 1.4cm, height: 0.8cm, `PSP`)
+      node((rel: (3.2cm, -2.4cm), to: <SoC>), name: <psp>, stroke: fg, fill: node_bg, width: 1.4cm, height: 0.8cm, `PSP`)
       node((rel: (3.2cm, 0cm), to: <SoC>), name: <cs>, stroke: fg, fill: cs_bg, width: 3.2cm, height: 1cm, `Coherence Controller`)
       node((rel: (3.2cm, 1.8cm), to: <SoC>), name: <umc>, stroke: fg, fill: umc_bg, width: 3.2cm, height: 1cm, `Memory Controller`)
       // DRAM

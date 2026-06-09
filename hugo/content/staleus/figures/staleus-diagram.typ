@@ -86,7 +86,7 @@
       )
 
       // PSP, CS, UMC
-      node((rel: (3.2cm, -2.4cm), to: <SoC>), name: <psp>, stroke: fg, fill: psp_bg, width: 1.4cm, height: 0.8cm, `PSP`)
+      node((rel: (3.2cm, -2.4cm), to: <SoC>), name: <psp>, stroke: fg, fill: node_bg, width: 1.4cm, height: 0.8cm, `PSP`)
       node(
         (rel: (3.2cm, 0cm), to: <SoC>),
         name: <cs>,
@@ -128,7 +128,7 @@
           <cs>,
           "-|>",
           stroke: fg + 1.2pt,
-          label: align(center, text(size: 10pt)[PSP writes \ 0xAFFE to DRAM]),
+          label: align(center, text(size: 10pt)[1\. PSP writes \ 0xAFFE to DRAM]),
           label-side: left,
           label-pos: 0.4,
         )
@@ -136,7 +136,7 @@
           (rel: (8.5cm, 2.8cm), to: <SoC>),
           name: <dramVal>,
           stroke: fg,
-          fill: node_bg,
+          fill: psp_bg,
           width: 1.6cm,
           height: 1cm,
           corner-radius: 0.2cm,
@@ -149,7 +149,7 @@
           (rel: (8.5cm, 2.8cm), to: <SoC>),
           name: <dramVal>,
           stroke: fg,
-          fill: node_bg,
+          fill: dirty_bg,
           width: 1.6cm,
           height: 1cm,
           corner-radius: 0.2cm,
@@ -160,7 +160,7 @@
           <umc.west>,
           "-|>",
           stroke: fg + 1.2pt,
-          label: align(center, move(dy: -17pt, text(size: 10pt)[Core flushes \ dirty cache line])),
+          label: align(center, move(dy: -17pt, text(size: 10pt)[2\. Core flushes \ dirty cache line])),
           label-side: center,
           label-pos: 0.5,
           label-fill: none,
