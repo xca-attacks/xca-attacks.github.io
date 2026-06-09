@@ -12,9 +12,7 @@
   dirty_bg: rgb("#ffcdd2"),
 ) = {
   // Ensure all text inside the diagram uses the provided foreground color
-
   set text(fill: fg)
-
 
   align(
     center + horizon,

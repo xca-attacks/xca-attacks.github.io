@@ -74,8 +74,16 @@ This allows the attacker to induce a split memory view: the PSP operates on stal
     description="PSP writes to DRAM, but the Coherency Controller does not ensure cache coherence. A subsequent cache flush overwrites PSP written data.">}}
 
 
-### What went wrong?
-Staleus is possible because security-critical configuration for the platform's most privileged component, the PSP, is partially accessible and writable by kernel-mode x86 cores, i.e., a malicious hypervisor. The hypervisor can toggle the NoSnoop attribute on PSP memory transactions after SEV-SNP is fully active. AMD fails to enforce that unprivileged components cannot alter the data flow configuration of higher-privileged ones.
+### Attack Details
+In more detail, AMD Zen CPUs employ so-called bridges that translate between different bus protocols. The SYSHUB is one such bridge and serves as AMD’s architectural gateway for integrating third-party IP blocks into the Data Fabric. Among other functions, it converts standard AXI transactions into AMD’s proprietary Scalable Data Port (SDP) bus protocol. Our reverse engineering efforts reveal that the SYSHUB services multiple clients, all of which interface via an internal crossbar. Crucially, the PSP functions as one of these clients whenever it initiates access to the Data Fabric (e.g., targeting x86 DRAM). The SYSHUB is responsible for translating PSP AXI signaling into compatible SDP signals. 
+{{< theme-image
+    light="./figures/axi-sdp-light.svg"
+    dark="./figures/axi-sdp-dark.svg"
+    alt="Simplified data path for PSP memory requests"
+    description="Simplified data path for PSP memory requests.">}}
+
+Illustration 3 visualizes this data flow from the PSP through the SYSHUB to the Data Fabric. Because the translation from AXI to SDP is not a one-to-one mapping, and given that data and control signals possess differing widths, the SYSHUB must aggregate specific AXI data lines or synthesize new SDP-specific signals. The configuration for the SYSHUB exposes control bits that define how the cache coherence attributes propagate to the SDP interface. Modifying this configuration alters the memory coherence properties of the PSP with respect to x86 DRAM. PSP memory requests tagged with the NoSnoop attribute result in the transactions ignoring dirty data in theresiding in x86 caches.
+
 
 ### Attack Complexity
 Staleus operates as a software-only exploit with a 100% success probability. It does not require single-stepping, any code running inside the victim CVM, or physical access to the hardware.
