@@ -10,7 +10,7 @@
 #let dirty_bg = rgb("#8f3f3f")
 
 // --- Kino Animation Logic ---
-#set page(width: 17cm, height: 8cm, fill: bg)
+#set page(width: 17.5cm, height: 8cm, fill: bg)
 #set text(fill: fg)
 
 // 1. Initialize the animation show rule

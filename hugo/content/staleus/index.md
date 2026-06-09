@@ -68,8 +68,8 @@ In the confidential computing threat model, the hypervisor is untrusted and pote
 This allows the attacker to induce a split memory view: the PSP operates on stale DRAM data while x86 cores hold divergent, more recent values in their caches. Staleus exploits this divergence in two ways. First, when the PSP reads DRAM, it retrieves stale data that does not reflect recent x86 cache writes. Second, when the PSP writes to DRAM, a subsequent x86 cache eviction silently overwrites the PSP-committed data. We leverage these primitives to forge the Guest Context Page, a PSP-protected structure holding the CVM attestation report and GuestPolicy fields, enabling the hypervisor to activate debug mode on a production CVM and gain arbitrary read and write access to CVM memory.
 
 {{< theme-video
-    light="./animations/staleus-light.mp4"
-    dark="./animations/staleus-dark.mp4"
+    light="./animations/staleus-light-diagram.mp4"
+    dark="./animations/staleus-dark-diagram.mp4"
     alt="High level overview of the Staleus Attack"
     description="PSP writes to DRAM, but the Coherency Controller does not ensure cache coherence. A subsequent cache flush overwrites PSP written data.">}}
 
