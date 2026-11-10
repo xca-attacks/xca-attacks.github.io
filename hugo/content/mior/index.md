@@ -107,7 +107,7 @@ to them will reach a device via MMIO.
     light="./typst-illustrations/broadcast-or-light.svg"
     dark="./typst-illustrations/broadcast-or-dark.svg"
     alt="Benign and malicious routing configurations produce the same broadcast OR result: 0xd3000 OR 0x01000 is 0xd3000, and 0xd3fff OR 0x01023 is 0xd3fff. The malicious range is missing from the PSP memory map."
-    description="Broadcast reads combine routing registers using bitwise OR. A malicious range (RM) at the PSP entry point can be hidden by a benign range (RB) at another entry point. The PSP accepts RM as DRAM even though its accesses reach MMIO.">}}
+    description="Broadcast reads combine routing registers using bitwise OR. A malicious range (RM) at the PSP entry point can be hidden by a benign range (RB) at another entry point. Consider an RB that spans from 0xd3000 to 0xd3fff and RM from 0x01000 to 0x01023. ORing the bounds of these two ranges (for example 0x3d000 | 0x01000) results in the same bounds as for RM. The PSP therefore thinks all of RM is DRAM even though its accesses reach MMIO.">}}
 
 What can an attacker do with this misrouting? The obvious approach is to drop
 the PSP writes that initialize the RMP. When we attempted this, however, we
