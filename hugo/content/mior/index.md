@@ -189,9 +189,10 @@ potentially affected.
 
 {{< details "Q: Is the attack scenario realistic?" >}}
 
-- We operate in the threat model defined for AMD SEV-SNP. AMD explicitly
-  distrusts the hypervisor, and confidential computing specifically aims to
-  protect sensitive data from a potentially malicious cloud provider.
+- We operate in AMD’s threat model defined for SEV-SNP. AMD explicitly distrusts
+  the UEFI, thus an attacker can modify the UEFI. Further, since confidential
+  computing aims to protect sensitive data from a cloud provider it can be
+  assumed that the cloud providers have custom UEFI implementations.
 
 {{< /details >}}
 
