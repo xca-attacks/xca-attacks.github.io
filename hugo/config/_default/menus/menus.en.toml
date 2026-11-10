@@ -47,7 +47,7 @@
   name = "Mior"
   identifier = "mior"
   url = "/mior/"
-  weight = 30
+  weight = 40
 
 [[main]]
   name = "Media"

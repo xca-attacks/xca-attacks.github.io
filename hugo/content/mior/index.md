@@ -49,17 +49,18 @@ Confidential computing allows cloud tenants to run sensitive workloads without
 trusting the cloud service provider. Hardware-based trusted execution
 environments, such as AMD SEV-SNP, protect these workloads inside Confidential
 Virtual Machines (CVMs). With Mior, we present a software-only attack that
-compromises SEV-SNP by redirecting memory accesses of the secure co-processor
-(PSP) to an attacker-controlled device. The device acts as a substitute for
-DRAM, allowing the PSP initialization checks to succeed while leaving critical
-memory protections uninitialized. A malicious hypervisor can then read and
-modify CVM memory or forge valid attestation reports for any guest.
+compromises SEV-SNP by yet again corrupting the routing on the Infinity Fabric.
+In particular, this time around, we change the platform routing such that PSP
+reads and writes go to an attacker-controlled device instead of the DRAM. This
+way, we pass PSP’s initialization checks while leaving critical memory
+protections uninitialized. Then we show that malicious hypervisor can read and
+modify CVM memory or forge valid attestation reports for any
 
 ### AMD SEV-SNP
 
-Ordinary virtual machines rely on the hypervisor to isolate tenants. SEV-SNP
-extends this isolation to protect a guest from the hypervisor itself, using
-memory encryption and hardware-enforced access control. A central data
+Traditional virtual machines rely on the hypervisor to isolate tenants. SEV-SNP
+extends this isolation to protect a virtual machine from the hypervisor itself,
+using memory encryption and hardware-enforced access control. A central data
 structure, the Reverse Map Table (RMP), tracks ownership and permissions for
 physical memory pages. The encryption of guest memory provides confidentiality,
 while the RMP protects its integrity. The PSP initializes this table and manages
@@ -95,13 +96,14 @@ redirects selected DRAM accesses to device memory. The hypervisor can carfeully
 choose rules at other entry points to hide this redirection from the PSP
 memory-map checks.
 
-The PSP builds its memory map before initializing SEV-SNP. It uses this map to
-reject addresses that lead to MMIO rather than DRAM. However, the PSP reads
-routing registers through a broadcast operation that combines the values from
-different fabric components using a bitwise OR. When these components have
-different configurations, the combined result can conceal a malicious MMIO
-range. The PSP therefore accepts addresses as DRAM even though its own accesses
-to them will reach a device via MMIO.
+The PSP builds its memory map before initializing SEV-SNP. It uses this map
+ensure that the configurations are set such that PSP accesses are strictly
+routed to DRAM, i.e., it rejects any configuration that may route to MMIO.
+However, the PSP reads routing registers through a broadcast operation that
+combines the values from different fabric components using a bitwise OR. When
+these components have different configurations, the combined result can conceal
+a malicious MMIO range. The PSP therefore accepts addresses as DRAM even though
+its own accesses to them will reach a device via MMIO.
 
 {{< theme-image
     light="./typst-illustrations/broadcast-or-light.svg"
