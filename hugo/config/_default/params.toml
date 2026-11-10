@@ -1,7 +1,7 @@
 # Hugo
 title = "XCA"
 description = "XCA stands for Interconnect Corruption Attacks. It is a family of attacks where an attacker manipulates the interconnect to corrupt data and control flow between System on Chip components to compromise TEEs."
-images = ["preview.png?123456"]
+images = ["preview-v2.png"]
 
 # mainSections
 mainSections = ["overview", "fabricked", "breakfast", "media"]
@@ -128,7 +128,7 @@ mainSections = ["overview", "fabricked", "breakfast", "media"]
     logo = "favicon-512x512.png" # Logo of Organization — favicon-512x512.png (default)
     name = "Secure and Trustworthy Systems Group ETHZ" # Name of Organization or Person
     sameAs = [] # E.g. ["https://github.com/gethyas/hyas", "https://fosstodon.org/@hyas"]
-    images = ["preview.png?0123456789"] # ["cover.png"] (default)
+    images = ["preview-v2.png"] # ["cover.png"] (default)
     article = ["fabricked", "overview"] # Article sections
     newsArticle = [] # NewsArticle sections
     blogPosting = ["overview"] # BlogPosting sections
