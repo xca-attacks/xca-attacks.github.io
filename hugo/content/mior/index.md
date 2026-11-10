@@ -142,18 +142,6 @@ that it reached the DRAM used by the CPU to enforce isolation. A defense must
 account for each component’s routing configuration or enforce a consistent
 configuration across the fabric.
 
-### Attack Complexity
-
-Mior requires control of the BIOS and hypervisor, plus a device that can back
-the redirected accesses, all of which are in scope for a confidential computing
-adversary. It needs no code inside the victim CVM and no physical
-tampering with the processor. In our evaluation, the debug attack succeeded in
-all 1,000 trials both with and without ciphertext hiding. After compromising the
-RMP, enabling debug access took about 1.7 milliseconds on average. This step
-uses repeated ciphertext corruption and took roughly two attempts on average.
-Forging a launch measurement additionally requires a preparation phase that
-launches a benign guest and saves its encrypted measurement.
-
 ## Affected Hardware
 
 We demonstrated the end-to-end attack on an AMD Zen 5 EPYC 9135 processor with
@@ -173,12 +161,11 @@ potentially affected.
 
 {{< /details >}}
 
-{{< details "Q: Is this attack scenario realistic?" >}}
+{{< details "Q: Why is Mior an XCA attack?" >}}
 
-- SEV-SNP is designed to protect tenants from an untrusted cloud provider. A
-  provider can control the hypervisor, platform firmware, and attached devices.
-  Mior uses these capabilities to attack the hardware isolation that should
-  protect tenants from that provider.
+- Mior corrupts interconnect routing to violate a trusted execution
+  environment security guarantees. It is an instance of the Interconnect
+  Corruption Attacks (XCA) class.
 
 {{< /details >}}
 
@@ -191,16 +178,20 @@ potentially affected.
 
 {{< /details >}}
 
-{{< details "Q: Does ciphertext hiding stop Mior?" >}}
+{{< details "Q: Why the name MIOR?" >}}
 
-- No. Both case studies succeeded with ciphertext hiding enabled. They target
-  the guest context page, which the PSP encrypts directly and accesses
-  differently from ordinary guest memory. Ciphertext hiding does not prevent the
-  metadata corruption and replay used here.
+- MIOR is a blend word of MMIO and OR, signifying that we use MMIO rerouting and
+  hiding it with the mistaken OR reduction the PSP performs.
 
 {{< /details >}}
 
+{{< details "Q: Is the attack scenario realistic?" >}}
 
+- We operate in the threat model defined for AMD SEV-SNP. AMD explicitly
+  distrusts the hypervisor, and confidential computing specifically aims to
+  protect sensitive data from a potentially malicious cloud provider.
+
+{{< /details >}}
 
 {{< details "Q: Does Mior affect ordinary virtual machines?" >}}
 
@@ -222,14 +213,6 @@ potentially affected.
 
 - We did not evaluate those versions. Unlike SEV-SNP, SEV and SEV-ES do not
   provide the guest-memory integrity guarantees targeted by Mior.
-
-{{< /details >}}
-
-{{< details "Q: Why is Mior an XCA attack?" >}}
-
-- Mior corrupts interconnect routing to violate a trusted execution
-  environment security guarantees. It is an instance of the Interconnect
-  Corruption Attacks (XCA) class.
 
 {{< /details >}}
 
